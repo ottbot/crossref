@@ -1,1 +1,19 @@
-Access DOI metadata from CrossRef.org
+Crossref - A ruby way to work with DOI metadata from crossref.org
+
+You can get info on many academic articles via DOI. 
+This gem gets XML from crossref and gives you a nice ruby object to work with.
+
+Requires nokogiri
+
+Example:
+
+>> require 'crossref'
+=> true
+>> paper = Crossref::Metadata.new('10.1021/ie50324a027')
+...
+>> paper.title
+=> "Heat Transfer and Pressure Drop of Liquids in Tubes"
+>> paper.authors
+=> [{:surname=>"Sieder", :given_name=>"E. N."}, {:surname=>"Tate", :given_name=>"G. E."}]
+>> paper.journal
+=> {:title=>"Industrial & Engineering Chemistry"}
