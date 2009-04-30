@@ -11,7 +11,7 @@ module Crossref
     def initialize(doi, *opts)
       @doi = doi
       @crossref_url = "http://crossref.org/openurl/?noredirect=true&format=unixref&id=doi:" + doi
-      @xml = parse_metadata(@crossref_url)
+      @xml = Nokogiri::XML(open(@crossref_url))
     end
 
     def title
@@ -42,11 +42,7 @@ module Crossref
       
     
     private
-     
-    def parse_metadata(url)
-      Nokogiri::XML(open(url))
-    end
-    
+  
     def hashify_name(element)
       n = Hash.new
       element.each do |e|
