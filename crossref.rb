@@ -23,7 +23,7 @@ module Crossref
     end
     
     def title
-      self.xml.xpath('//titles/title').first.content
+      xpath_first('//titles/title')
     end
 
     def authors
@@ -39,17 +39,37 @@ module Crossref
       end
       authors
     end
+
+    def published
+      pub = Hash.new
+      pub[:year] = self.xml.xpath('//publication_date/year')
+      pub[:month] = self.xml.xpath('//publication_date/month')
+      pub
+    end
     
     def journal
       journal = Hash.new
-      journal[:title] = self.xml.xpath('//journal/journal_metadata/full_title').first.content
-
+      journal[:title] = xpath_first('//journal_metadata/full_title')
+      journal[:title] = xpath_first('//journal_metadata/abbrev_title')
+      journal[:volume] = xpath_first('//journal_issue/journal_volume/volume') 
+      journal[:issue] = xpath_first('//journal_issue/issue')
+      journal[:first_page] = xpath_first('//first_page')
+      journal[:last_page] = xpath_first('//last_page')
+      journal[:issn] = xpath_first('//journal_metadata/issn')
       journal
     end
-      
+
+    def resource
+      xpath_first('//doi_data/resource')
+    end
+    
     #------------------------------------------------------
     private
 
+    def xpath_first(q)
+      self.xml.xpath(q).first.content
+    end
+    
     def get_xml(url)
       Nokogiri::XML(open(url))
     end
