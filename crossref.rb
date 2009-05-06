@@ -2,18 +2,26 @@ require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
 
-EXDOI =  '10.1080/10615800801998914'
-
 module Crossref
   class Metadata
-    attr_accessor :doi, :crossref_url, :xml
+    attr_accessor :doi, :url, :xml
     
-    def initialize(doi, *opts)
-      @doi = doi
-      @crossref_url = "http://crossref.org/openurl/?noredirect=true&format=unixref&id=doi:" + doi
-      @xml = Nokogiri::XML(open(@crossref_url))
+    def initialize(opts = {})
+      @base_url =  opts[:base_url] || 'http://crossref.org/openurl/?noredirect=true&format=unixref'      
+      @doi = opts[:doi]
+      @pid = opts[:pid]
+      @base_url += '&pid=' + @pid if @pid
+      
+      if @doi
+        @url = @base_url + "&id=doi:" + @doi
+        @xml = get_xml(@url)
+      end
     end
-
+    
+    def doi(doi)
+      Crossref::Metadata.new(:doi => doi, :pid => @pid, :url => @base_url)
+    end
+    
     def title
       self.xml.xpath('//titles/title').first.content
     end
@@ -25,8 +33,7 @@ module Crossref
       first_author.unlink
       
       # maybe we shouldn't delete the first author element, but change
-      # the xpath below
-      
+      # the xpath below to exlude it
       self.xml.xpath('//contributors/person_name[@contributor_role="author"]').each do |a| 
        authors << hashify_name(a.children) 
       end
@@ -40,9 +47,13 @@ module Crossref
       journal
     end
       
-    
+    #------------------------------------------------------
     private
-  
+
+    def get_xml(url)
+      Nokogiri::XML(open(url))
+    end
+    
     def hashify_name(element)
       n = Hash.new
       element.each do |e|
