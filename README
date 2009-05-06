@@ -12,11 +12,11 @@ Example:
 >> require 'crossref'
 => true
 >> CR = Crossref::Metadata.new(:pid => "you@example.com")
-=> #<Crossref::Metadata:0x1121848 @base_url="http://crossref.org/openurl/?noredirect=true&format=unixref&pid=robert@osbornebrook.co.uk", @pid="robert@osbornebrook.co.uk", @doi=nil>
+=> #<Crossref::Metadata:0x1121848 @base_url="http://crossref.org/openurl/?noredirect=true&format=unixref&pid=you@example.com", @pid="you@example.com", @doi=nil>
 
 >> paper = CR.doi('10.1021/ie50324a027')
 => #<Crossref::Metadata:0x111cd48 @xml=<?xml version="1.0"?>...
-, @url="http://crossref.org/openurl/?noredirect=true&format=unixref&pid=robert@osbornebrook.co.uk&id=doi:10.1021/ie50324a027", @base_url="http://crossref.org/openurl/?noredirect=true&format=unixref&pid=robert@osbornebrook.co.uk", @pid="robert@osbornebrook.co.uk", @doi="10.1021/ie50324a027">
+, @url="http://crossref.org/openurl/?noredirect=true&format=unixref&pid=you@example.com&id=doi:10.1021/ie50324a027", @base_url="http://crossref.org/openurl/?noredirect=true&format=unixref&pid=you@example.com", @pid="you@example.com", @doi="10.1021/ie50324a027">
 
 >> paper.title
 => "Heat Transfer and Pressure Drop of Liquids in Tubes"
