@@ -19,10 +19,12 @@ module Crossref
         @xml = get_xml(@url)
       end
     end
+
     
     def doi(doi)
       Crossref::Metadata.new(:doi => doi, :pid => @pid, :url => @base_url)
     end
+
     
     def result?
       if self.xml.nil? || self.xml.xpath('//error').size == 1
@@ -31,42 +33,41 @@ module Crossref
         self.xml.xpath('//doi_record').size == 1
       end
     end
-    
+
     
     def title
       xpath_first('//titles/title')
     end
-
+    
+    
     def authors
-      first_author = self.xml.xpath('//person_name[@sequence="first"]').first
+      #first_author = self.xml.xpath('//person_name[@sequence="first"]').first
+      #authors = [hashify_name(first_author.children)]
+      #first_author.unlink
 
-      authors = [hashify_name(first_author.children)]
-      first_author.unlink
-      
-      # maybe we shouldn't delete the first author element, but change
-      # the xpath below to exlude it
+      authors = []
       self.xml.xpath('//contributors/person_name[@contributor_role="author"]').each do |a| 
-       authors << hashify_name(a.children) 
+       authors << hashify_nodes(a.children) 
       end
       authors
     end
-
+    
+    
     def published
       pub = Hash.new
       pub[:year] = self.xml.xpath('//publication_date/year')
       pub[:month] = self.xml.xpath('//publication_date/month')
       pub
     end
+
     
     def journal
-      journal = Hash.new
-      journal[:title] = xpath_first('//journal_metadata/full_title')
-      journal[:title] = xpath_first('//journal_metadata/abbrev_title')
+      journal = hashify_nodes(self.xml.xpath('//journal_metadata').first.children)
       journal[:volume] = xpath_first('//journal_issue/journal_volume/volume') 
       journal[:issue] = xpath_first('//journal_issue/issue')
       journal[:first_page] = xpath_first('//first_page')
       journal[:last_page] = xpath_first('//last_page')
-      journal[:issn] = xpath_first('//journal_metadata/issn')
+
       journal
     end
 
@@ -85,12 +86,12 @@ module Crossref
       Nokogiri::XML(open(url))
     end
     
-    def hashify_name(element)
-      n = Hash.new
-      element.each do |e|
-        n[e.name.to_sym] = e.content unless e.content.match(/\n/)
+    def hashify_nodes(nodes)
+      h = {}
+      nodes.each do |node|
+        h[node.name.to_sym] = node.content unless node.content.match(/\n/)
       end
-      n
+      h
     end
     
   end
