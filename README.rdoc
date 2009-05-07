@@ -52,14 +52,14 @@ Get your data:
 nokogiri
 
 == INSTALL:
-rake package
-sudo gem install pkg/crossref-0.0.1.gem
+  rake package
+  sudo gem install pkg/crossref-0.0.1.gem
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2009 FIXME full name
+Copyright (c) 2009 Robert Crim
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
