@@ -3,6 +3,8 @@ require 'nokogiri'
 require 'open-uri'
 
 module Crossref
+  VERSION = '0.0.1'
+
   class Metadata
     attr_accessor :doi, :url, :xml
     

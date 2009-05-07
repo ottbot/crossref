@@ -1,0 +1,70 @@
+= crossref
+
+* http://github.com/ottbot/crossref/tree
+
+== DESCRIPTION:
+
+Crossref - A ruby way to work with DOI metadata from crossref.org
+
+You can get info on many academic articles via DOI. 
+This gem gets XML from crossref and gives you a nice ruby object to work with.
+
+== FEATURES/PROBLEMS:
+
+Very early in development, made a specialized applicaiton. 
+
+== SYNOPSIS:
+
+>> require 'crossref'
+=> true
+>> CR = Crossref::Metadata.new(:pid => "you@example.com")
+=> #<Crossref::Metadata:0x1121848 @base_url="http://crossref.org/openurl/?noredirect=true&format=unixref&pid=you@example.com", @pid="you@example.com", @doi=nil>
+
+>> paper = CR.doi('10.1021/ie50324a027')
+=> #<Crossref::Metadata:0x111cd48 @xml=<?xml version="1.0"?>...
+, @url="http://crossref.org/openurl/?noredirect=true&format=unixref&pid=you@example.com&id=doi:10.1021/ie50324a027", @base_url="http://crossref.org/openurl/?noredirect=true&format=unixref&pid=you@example.com", @pid="you@example.com", @doi="10.1021/ie50324a027">
+
+>> paper.title
+=> "Heat Transfer and Pressure Drop of Liquids in Tubes"
+
+>> paper.journal
+=> {:volume=>"28", :issue=>"12", :first_page=>"1429", :last_page=>"1435", :title=>"Ind. Eng. Chem.", :issn=>"0019-7866"}
+
+>> paper.published
+=> {:month=><month>12</month><month>12</month>, :year=><year>1936</year><year>1936</year>}
+
+>> paper.authors
+=> [{:given_name=>"E. N.", :surname=>"Sieder"}, {:given_name=>"G. E.", :surname=>"Tate"}]
+
+== REQUIREMENTS:
+
+nokogiri
+
+== INSTALL:
+rake package
+sudo gem install pkg/crossref-0.0.1.gem
+
+== LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2009 FIXME full name
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
