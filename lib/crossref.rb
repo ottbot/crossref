@@ -24,6 +24,15 @@ module Crossref
       Crossref::Metadata.new(:doi => doi, :pid => @pid, :url => @base_url)
     end
     
+    def result?
+      if self.xml.nil? || self.xml.xpath('//error').size == 1
+        false
+      else
+        self.xml.xpath('//doi_record').size == 1
+      end
+    end
+    
+    
     def title
       xpath_first('//titles/title')
     end
