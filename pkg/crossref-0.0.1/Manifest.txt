@@ -1,7 +1,0 @@
-History.txt
-Manifest.txt
-README.txt
-Rakefile
-bin/crossref
-lib/crossref.rb
-test/test_crossref.rb

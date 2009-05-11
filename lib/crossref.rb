@@ -3,7 +3,7 @@ require 'nokogiri'
 require 'open-uri'
 
 module Crossref
-  VERSION = '0.0.1'
+  VERSION = '0.0.2'
 
   class Metadata
     attr_accessor :doi, :url, :xml
@@ -15,6 +15,7 @@ module Crossref
       @base_url += '&pid=' + @pid if @pid
       
       if @doi
+        @doi = sanitize_doi(@doi)
         @url = @base_url + "&id=doi:" + @doi
         @xml = get_xml(@url)
       end
@@ -55,8 +56,8 @@ module Crossref
     
     def published
       pub = Hash.new
-      pub[:year] = self.xml.xpath('//publication_date/year')
-      pub[:month] = self.xml.xpath('//publication_date/month')
+      pub[:year] = xpath_first('//publication_date/year')
+      pub[:month] = xpath_first('//publication_date/month')
       pub
     end
 
@@ -92,6 +93,10 @@ module Crossref
         h[node.name.to_sym] = node.content unless node.content.match(/\n/)
       end
       h
+    end
+
+    def sanitize_doi(doi)
+      doi.gsub(/\n+|\s+/,'')
     end
     
   end

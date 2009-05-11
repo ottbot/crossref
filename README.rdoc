@@ -31,7 +31,7 @@ Get a paper with a DOI
 
   >> paper = CR.doi('10.1021/ie50324a027')
   => #<Crossref::Metadata:0x111cd48 @xml=<?xml version="1.0"?>...
-, @url="http://crossref.org/openurl/?noredirect=true&format=unixref&pid=you@example.com&id=doi:10.1021/ie50324a027", @base_url="http://crossref.org/openurl/?noredirect=true&format=unixref&pid=you@example.com", @pid="you@example.com", @doi="10.1021/ie50324a027">
+  , @url="http://crossref.org/openurl/?noredirect=true&format=unixref&pid=you@example.com&id=doi:10.1021/ie50324a027", @base_url="http://crossref.org/openurl/?noredirect=true&format=unixref&pid=you@example.com", @pid="you@example.com", @doi="10.1021/ie50324a027">
 
 Get your data:
 
