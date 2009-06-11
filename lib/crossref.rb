@@ -3,7 +3,7 @@ require 'nokogiri'
 require 'open-uri'
 
 module Crossref
-  VERSION = '0.0.2'
+  VERSION = '0.0.3'
 
   class Metadata
     attr_accessor :doi, :url, :xml
@@ -80,7 +80,11 @@ module Crossref
     private
 
     def xpath_first(q)
-      self.xml.xpath(q).first.content
+      if info = self.xml.xpath(q).first
+        info.content
+      else
+        nil
+      end
     end
     
     def get_xml(url)
