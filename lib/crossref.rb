@@ -28,26 +28,22 @@ module Crossref
 
     
     def result?
-      if self.xml.nil? || self.xml.xpath('//error').size == 1
+      if self.xml.nil? || xpath_ns('error').size == 1
         false
       else
-        self.xml.xpath('//doi_record').size == 1
+        xpath_ns('doi_record').size == 1
       end
     end
 
     
     def title
-      xpath_first('//titles/title')
+      xpath_first('titles/title')
     end
     
     
     def authors
-      #first_author = self.xml.xpath('//person_name[@sequence="first"]').first
-      #authors = [hashify_name(first_author.children)]
-      #first_author.unlink
-
       authors = []
-      self.xml.xpath('//contributors/person_name[@contributor_role="author"]').each do |a| 
+      xpath_ns('contributors/person_name[@contributor_role="author"]').each do |a| 
        authors << hashify_nodes(a.children) 
       end
       authors
@@ -56,37 +52,42 @@ module Crossref
     
     def published
       pub = Hash.new
-      pub[:year] = xpath_first('//publication_date/year')
-      pub[:month] = xpath_first('//publication_date/month')
+      pub[:year] = xpath_first('publication_date/year')
+      pub[:month] = xpath_first('publication_date/month')
       pub
     end
 
     
     def journal
-      journal = hashify_nodes(self.xml.xpath('//journal_metadata').first.children)
-      journal[:volume] = xpath_first('//journal_issue/journal_volume/volume') 
-      journal[:issue] = xpath_first('//journal_issue/issue')
-      journal[:first_page] = xpath_first('//first_page')
-      journal[:last_page] = xpath_first('//last_page')
+      journal = hashify_nodes(xpath_ns('journal_metadata').first.children)
+      journal[:volume] = xpath_first('journal_issue/journal_volume/volume') 
+      journal[:issue] = xpath_first('journal_issue/issue')
+      journal[:first_page] = xpath_first('first_page')
+      journal[:last_page] = xpath_first('last_page')
 
       journal
     end
 
     def resource
-      xpath_first('//doi_data/resource')
+      xpath_first('doi_data/resource')
+    end
+
+    def xpath_ns(q, ns = 'http://www.crossref.org/xschema/1.0')
+      self.xml.xpath("//#{q.split('/').map {|e| "xmlns:#{e}"}.join('/')}", 'xmlns' => ns)
     end
     
-    #------------------------------------------------------
-    private
-
     def xpath_first(q)
-      if info = self.xml.xpath(q).first
+      if info = xpath_ns(q).first
         info.content
       else
         nil
       end
     end
     
+    #------------------------------------------------------
+    private
+
+
     def get_xml(url)
       Nokogiri::XML(open(url))
     end
